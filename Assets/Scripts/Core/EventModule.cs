@@ -9,7 +9,7 @@ namespace Framework.Core
         /// <summary>
         /// 事件名称
         /// </summary>
-        public string EventName { get; private set; }
+        public EventEnum EventName { get; private set; }
         /// <summary>
         /// 事件发送者
         /// </summary>
@@ -19,7 +19,7 @@ namespace Framework.Core
         /// </summary>
         public Dictionary<string, object> Parameters { get; private set; }
 
-        public EventArgs(string eventName, object sender, Dictionary<string, object> parameters = null)
+        public EventArgs(EventEnum eventName, object sender, Dictionary<string, object> parameters = null)
         {
             EventName = eventName;
             Sender = sender;
@@ -31,11 +31,11 @@ namespace Framework.Core
     {
         public string Name => "Event";
 
-        private Dictionary<string, Action<EventArgs>> eventDictionary;
+        private Dictionary<EventEnum, Action<EventArgs>> eventDictionary;
 
         public EventModule()
         {
-            eventDictionary = new Dictionary<string, Action<EventArgs>>();
+            eventDictionary = new Dictionary<EventEnum, Action<EventArgs>>();
         }
 
         public async UniTask OnInit() { }
@@ -46,7 +46,7 @@ namespace Framework.Core
             eventDictionary.Clear();
         }
 
-        public void AddListener(string eventName, Action<EventArgs> listener)
+        public void AddListener(EventEnum eventName, Action<EventArgs> listener)
         {
             if (!eventDictionary.ContainsKey(eventName))
             {
@@ -58,7 +58,7 @@ namespace Framework.Core
             }
         }
 
-        public void RemoveListener(string eventName, Action<EventArgs> listener)
+        public void RemoveListener(EventEnum eventName, Action<EventArgs> listener)
         {
             if (eventDictionary.ContainsKey(eventName))
             {
@@ -71,7 +71,7 @@ namespace Framework.Core
             }
         }
 
-        public void TriggerEvent(string eventName, object sender, Dictionary<string, object> parameters = null)
+        public void TriggerEvent(EventEnum eventName, object sender, Dictionary<string, object> parameters = null)
         {
             if (eventDictionary.ContainsKey(eventName))
             {
@@ -83,6 +83,12 @@ namespace Framework.Core
 
     public enum EventEnum
     {
-        InitializePackage,
+        ChangeProgress,
+        InitializeFailed,
+        FoundUpdateFiles,
+        WebFileDownloadFailed,
+        DownloadProgressUpdate,
+        PatchManifestUpdateFailed,
+        PackageVersionUpdateFailed,
     }
 }

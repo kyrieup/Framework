@@ -18,8 +18,8 @@ internal class FsmUpdatePackageVersion : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        PatchEventDefine.PatchStatesChange.SendEventMessage("获取最新的资源版本 !");
-        GameManager.Instance.StartCoroutine(UpdatePackageVersion());
+        GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.ChangeProgress, this);
+        await UpdatePackageVersion();
     }
     async UniTask IFsmNode.OnUpdate()
     {
@@ -28,19 +28,19 @@ internal class FsmUpdatePackageVersion : IFsmNode
     {
     }
 
-    private IEnumerator UpdatePackageVersion()
+    private async UniTask UpdatePackageVersion()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        await UniTask.Delay(500);
 
         var packageName = (string)_machine.GetBlackboardValue("PackageName");
         var package = YooAssets.GetPackage(packageName);
         var operation = package.RequestPackageVersionAsync();
-        yield return operation;
+        await operation;
 
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning(operation.Error);
-            PatchEventDefine.PackageVersionUpdateFailed.SendEventMessage();
+            GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.PackageVersionUpdateFailed, this);
         }
         else
         {

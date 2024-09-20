@@ -17,8 +17,9 @@ internal class FsmDownloadPackageFiles : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        PatchEventDefine.PatchStatesChange.SendEventMessage("开始下载补丁文件！");
-        GameManager.Instance.StartCoroutine(BeginDownload());
+        GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.ChangeProgress, this);
+
+        await BeginDownload();
     }
     async UniTask IFsmNode.OnUpdate()
     {
@@ -27,17 +28,21 @@ internal class FsmDownloadPackageFiles : IFsmNode
     {
     }
 
-    private IEnumerator BeginDownload()
+    private async UniTask BeginDownload()
     {
         var downloader = (ResourceDownloaderOperation)_machine.GetBlackboardValue("Downloader");
-        downloader.OnDownloadErrorCallback = PatchEventDefine.WebFileDownloadFailed.SendEventMessage;
-        downloader.OnDownloadProgressCallback = PatchEventDefine.DownloadProgressUpdate.SendEventMessage;
+        downloader.OnDownloadErrorCallback = (operation, error) => GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.WebFileDownloadFailed, this);
+        downloader.OnDownloadProgressCallback = (totalDownloadCount, currentDownloadCount, totalDownloadBytes, currentDownloadBytes) =>
+        {
+            float progress = (float)currentDownloadBytes / totalDownloadBytes;
+            GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.DownloadProgressUpdate, this, new System.Collections.Generic.Dictionary<string, object> { { "Progress", progress } });
+        };
         downloader.BeginDownload();
-        yield return downloader;
+        await downloader.ToUniTask();
 
         // 检测下载结果
         if (downloader.Status != EOperationStatus.Succeed)
-            yield break;
+            await UniTask.Yield();
 
         _machine.ChangeState<FsmDownloadPackageOver>();
     }

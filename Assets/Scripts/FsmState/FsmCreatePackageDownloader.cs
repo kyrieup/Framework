@@ -18,8 +18,9 @@ public class FsmCreatePackageDownloader : IFsmNode
     }
     async UniTask OnEnter()
     {
-        PatchEventDefine.PatchStatesChange.SendEventMessage("创建补丁下载器！");
-        GameManager.Instance.StartCoroutine(CreateDownloader());
+        GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.ChangeProgress, this);
+
+        await CreateDownloader();
     }
     async UniTask OnUpdate()
     {
@@ -28,9 +29,9 @@ public class FsmCreatePackageDownloader : IFsmNode
     {
     }
 
-    IEnumerator CreateDownloader()
+    async UniTask CreateDownloader()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        await new WaitForSecondsRealtime(0.5f);
 
         var packageName = (string)_machine.GetBlackboardValue("PackageName");
         var package = YooAssets.GetPackage(packageName);
@@ -50,7 +51,7 @@ public class FsmCreatePackageDownloader : IFsmNode
             // 注意：开发者需要在下载前检测磁盘空间不足
             int totalDownloadCount = downloader.TotalDownloadCount;
             long totalDownloadBytes = downloader.TotalDownloadBytes;
-            PatchEventDefine.FoundUpdateFiles.SendEventMessage(totalDownloadCount, totalDownloadBytes);
+            GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.FoundUpdateFiles, this, new Dictionary<string, object> { { "totalDownloadCount", totalDownloadCount }, { "totalDownloadBytes", totalDownloadBytes } });
         }
     }
 

@@ -21,10 +21,8 @@ internal class FsmInitializePackage : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        //todo 抛事件
-        GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.InitializePackage, "初始化资源包！");
+        GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.ChangeProgress, this);
 
-        // PatchEventDefine.PatchStatesChange.SendEventMessage("初始化资源包！");
         await InitPackage();
     }
     async UniTask IFsmNode.OnUpdate()
@@ -89,7 +87,7 @@ internal class FsmInitializePackage : IFsmNode
         if (initializationOperation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"{initializationOperation.Error}");
-            PatchEventDefine.InitializeFailed.SendEventMessage();
+            GameEntry.Instance.GetEventModule().TriggerEvent(EventEnum.InitializeFailed, this);
         }
         else
         {
