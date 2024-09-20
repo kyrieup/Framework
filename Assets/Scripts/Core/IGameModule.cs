@@ -1,11 +1,13 @@
+using Cysharp.Threading.Tasks;
+
 namespace Framework.Core
 {
     public interface IGameModule
     {
         string Name { get; }
-        void OnInit();
-        void OnStart();
-        void OnUpdate();
-        void OnDestroy();
+        UniTask OnInit();
+        UniTask OnStart();
+        UniTask OnUpdate();
+        UniTask OnDestroy();
     }
 }

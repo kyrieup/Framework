@@ -5,55 +5,40 @@ using UnityEngine;
 
 namespace Framework.Core
 {
-    public class FsmModule : IGameModule
+    public class FsmMachine
     {
-        public string Name => "Fsm";
-
-        /// <summary>
-        /// 存放状态机的字典
-        /// </summary>
         private Dictionary<string, IFsmNode> states = new Dictionary<string, IFsmNode>();
 
-        /// <summary>
-        /// 当前节点
-        /// </summary>
+        private readonly Dictionary<string, System.Object> _blackboard = new Dictionary<string, object>(100);
         private IFsmNode _curNode;
-
-        /// <summary>
-        /// 上一个节点
-        /// </summary>
         private IFsmNode _preNode;
 
-        public void OnInit()
+        public async UniTask OnInit()
         {
             states = new Dictionary<string, IFsmNode>();
         }
-        public void OnStart() { }
 
-        public void OnUpdate()
+        public async UniTask OnStart()
+        {
+            _curNode?.OnEnter();
+        }
+
+        public async UniTask OnUpdate()
         {
             _curNode?.OnUpdate();
         }
 
-        public void OnDestroy()
+        public async UniTask OnDestroy()
         {
             states.Clear();
             _curNode = null;
         }
 
-        /// <summary>
-        /// 根据泛型添加状态节点
-        /// </summary>
-        /// <typeparam name="T">继承接口IFsmNode的类</typeparam>
         public void AddNode<T>() where T : IFsmNode
         {
             AddNode(Activator.CreateInstance(typeof(T)) as IFsmNode);
         }
 
-        /// <summary>
-        /// 添加节点
-        /// </summary>
-        /// <param name="node">节点实例</param>
         public void AddNode(IFsmNode node)
         {
             if (node == null)
@@ -67,22 +52,15 @@ namespace Framework.Core
             }
             else
             {
-                node.OnCreate();
+                node.OnCreate(this);
             }
         }
 
-        /// <summary>
-        /// 根据泛型切换状态
-        /// </summary>
-        /// <typeparam name="T">继承接口IFsmNode的类</typeparam>
         public void ChangeState<T>()
         {
             ChangeState(typeof(T).FullName);
         }
 
-        /// <summary>
-        /// 切换状态
-        /// </summary>
         public void ChangeState(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -100,7 +78,7 @@ namespace Framework.Core
             }
             else
             {
-                Debug.Log($"不存在改节点{name}");
+                Debug.Log($"不存在该节点{name}");
             }
         }
 
@@ -108,11 +86,39 @@ namespace Framework.Core
         {
             return _curNode;
         }
+        /// <summary>
+        /// 获取黑板数据
+        /// </summary>
+        public System.Object GetBlackboardValue(string key)
+        {
+            if (_blackboard.TryGetValue(key, out System.Object value))
+            {
+                return value;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 设置黑板数据
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetBlackboardValue(string key, System.Object value)
+        {
+            if (_blackboard.ContainsKey(key) == false)
+                _blackboard.Add(key, value);
+            else
+                _blackboard[key] = value;
+        }
+
     }
 
     public interface IFsmNode
     {
-        UniTask OnCreate();
+        UniTask OnCreate(FsmMachine machine);
         UniTask OnEnter();
         UniTask OnUpdate();
         UniTask OnExit();

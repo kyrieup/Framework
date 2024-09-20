@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 using System.Diagnostics;
-
+using Cysharp.Threading.Tasks;
 namespace Framework.Core
 {
     public enum LogLevel
@@ -90,7 +90,7 @@ namespace Framework.Core
 
         public DebugConfig config = new DebugConfig();
 
-        public void OnInit()
+        public async UniTask OnInit()
         {
 #if OPEN_LOG
             SRDebug.Init();
@@ -101,16 +101,17 @@ namespace Framework.Core
 #endif
         }
 
-        public void OnStart()
+        public async UniTask OnStart()
         {
+            
         }
 
-        public void OnUpdate()
+        public async UniTask OnUpdate()
         {
             Log("DebugModule OnUpdate", LogLevel.Debug, LogColor.Blue);
         }
 
-        public void OnDestroy()
+        public async UniTask OnDestroy()
         {
 
         }

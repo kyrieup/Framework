@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace Framework.Core
 {
@@ -37,10 +38,10 @@ namespace Framework.Core
             eventDictionary = new Dictionary<string, Action<EventArgs>>();
         }
 
-        public void OnInit() { }
-        public void OnStart() { }
-        public void OnUpdate() { }
-        public void OnDestroy() 
+        public async UniTask OnInit() { }
+        public async UniTask OnStart() { }
+        public async UniTask OnUpdate() { }
+        public async UniTask OnDestroy() 
         {
             eventDictionary.Clear();
         }
@@ -78,5 +79,10 @@ namespace Framework.Core
                 eventDictionary[eventName]?.Invoke(args);
             }
         }
+    }
+
+    public enum EventEnum
+    {
+        InitializePackage,
     }
 }

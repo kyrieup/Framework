@@ -66,11 +66,11 @@ namespace Framework.Core
 
         private void InitializeModules()
         {
-            RegisterModule(new DebugModule());
-            RegisterModule(new EventModule());  
-            RegisterModule(new FsmModule());
             // 在这里初始化和注册所有需要的模块
             // 例如：RegisterModule(new ResourceModule());
+            RegisterModule(new DebugModule());
+            RegisterModule(new EventModule());
+            RegisterModule(new ProcessModule());
         }
 
         public void RegisterModule(IGameModule module)

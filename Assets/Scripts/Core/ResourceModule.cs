@@ -10,7 +10,7 @@ namespace Framework.Core
 
         private ResourcePackage package;
 
-        public void OnInit()
+        public async UniTask OnInit()
         {
             // 初始化 YooAsset
             YooAssets.Initialize();
@@ -33,11 +33,11 @@ namespace Framework.Core
             // await downloader.DownloadAsync().ToUniTask();
         }
 
-        public void OnStart() { }
+        public async UniTask OnStart() { }
 
-        public void OnUpdate() { }
+        public async UniTask OnUpdate() { }
 
-        public void OnDestroy()
+        public async UniTask OnDestroy()
         {
             // 卸载所有资源
             // package.UnloadUnusedAssets();
