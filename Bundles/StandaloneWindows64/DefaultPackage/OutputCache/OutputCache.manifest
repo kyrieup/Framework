@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2834108464
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: defaultpackage_assets_gameart.bundle
+      Dependencies: {}

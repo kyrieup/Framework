@@ -9,7 +9,7 @@ namespace Framework.Core
         /// <summary>
         /// 事件名称
         /// </summary>
-        public EventEnum EventName { get; private set; }
+        public int EventName { get; private set; }
         /// <summary>
         /// 事件发送者
         /// </summary>
@@ -19,7 +19,7 @@ namespace Framework.Core
         /// </summary>
         public Dictionary<string, object> Parameters { get; private set; }
 
-        public EventArgs(EventEnum eventName, object sender, Dictionary<string, object> parameters = null)
+        public EventArgs(int eventName, object sender, Dictionary<string, object> parameters = null)
         {
             EventName = eventName;
             Sender = sender;
@@ -31,64 +31,93 @@ namespace Framework.Core
     {
         public string Name => "Event";
 
-        private Dictionary<EventEnum, Action<EventArgs>> eventDictionary;
+        private Dictionary<int, Action<EventArgs>> eventDictionary;
 
         public EventModule()
         {
-            eventDictionary = new Dictionary<EventEnum, Action<EventArgs>>();
+            eventDictionary = new Dictionary<int, Action<EventArgs>>();
         }
 
-        public async UniTask OnInit() { }
-        public async UniTask OnStart() { }
-        public async UniTask OnUpdate() { }
-        public async UniTask OnDestroy() 
+        public async UniTask OnInit() { await UniTask.CompletedTask; }
+        public async UniTask OnStart() { await UniTask.CompletedTask; }
+        public async UniTask OnUpdate() { await UniTask.CompletedTask; }
+        public async UniTask OnDestroy()
         {
             eventDictionary.Clear();
+            await UniTask.CompletedTask;
         }
 
         public void AddListener(EventEnum eventName, Action<EventArgs> listener)
         {
-            if (!eventDictionary.ContainsKey(eventName))
+            if (!eventDictionary.ContainsKey((int)eventName))
             {
-                eventDictionary[eventName] = listener;
+                eventDictionary[(int)eventName] = listener;
             }
             else
             {
-                eventDictionary[eventName] += listener;
+                eventDictionary[(int)eventName] += listener;
             }
         }
 
         public void RemoveListener(EventEnum eventName, Action<EventArgs> listener)
         {
-            if (eventDictionary.ContainsKey(eventName))
+            if (eventDictionary.ContainsKey((int)eventName))
             {
-                eventDictionary[eventName] -= listener;
+                eventDictionary[(int)eventName] -= listener;
 
-                if (eventDictionary[eventName] == null)
+                if (eventDictionary[(int)eventName] == null)
                 {
-                    eventDictionary.Remove(eventName);
+                    eventDictionary.Remove((int)eventName);
                 }
             }
         }
 
         public void TriggerEvent(EventEnum eventName, object sender, Dictionary<string, object> parameters = null)
         {
-            if (eventDictionary.ContainsKey(eventName))
+            if (eventDictionary.ContainsKey((int)eventName))
             {
-                EventArgs args = new EventArgs(eventName, sender, parameters);
-                eventDictionary[eventName]?.Invoke(args);
+                EventArgs args = new EventArgs((int)eventName, sender, parameters);
+                eventDictionary[(int)eventName]?.Invoke(args);
             }
         }
     }
 
+    /// <summary>
+    /// 事件枚举
+    /// </summary>
     public enum EventEnum
     {
+        /// <summary>
+        /// 进度改变
+        /// </summary>
         ChangeProgress,
+        /// <summary>
+        /// 初始化失败
+        /// </summary>
         InitializeFailed,
+        /// <summary>
+        /// 发现更新文件
+        /// </summary>
         FoundUpdateFiles,
+        /// <summary>
+        /// 下载失败
+        /// </summary>
         WebFileDownloadFailed,
+        /// <summary>
+        /// 下载进度更新
+        /// </summary>
         DownloadProgressUpdate,
+        /// <summary>
+        /// 更新包版本失败
+        /// </summary>
         PatchManifestUpdateFailed,
+        /// <summary>
+        /// 包版本更新失败
+        /// </summary>
         PackageVersionUpdateFailed,
+        /// <summary>
+        /// 更新完毕
+        /// </summary>
+        UpdaterDone,
     }
 }

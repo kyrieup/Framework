@@ -99,21 +99,23 @@ namespace Framework.Core
             // 关闭日志系统
             Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
 #endif
+            await UniTask.CompletedTask;
         }
 
         public async UniTask OnStart()
         {
-            
+            await UniTask.CompletedTask;
         }
 
         public async UniTask OnUpdate()
         {
             Log("DebugModule OnUpdate", LogLevel.Debug, LogColor.Blue);
+            await UniTask.CompletedTask;
         }
 
         public async UniTask OnDestroy()
         {
-
+            await UniTask.CompletedTask;
         }
 
         [Conditional("OPEN_LOG")]
@@ -170,6 +172,7 @@ namespace Framework.Core
                 case LogColor.Orange:
                     msg = $"<color=#FFA500>{msg}</color>";
                     break;
+                    
                 case LogColor.Red:
                     msg = $"<color=#FF0000>{msg}</color>";
                     break;

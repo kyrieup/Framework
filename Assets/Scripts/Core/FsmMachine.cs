@@ -16,22 +16,30 @@ namespace Framework.Core
         public async UniTask OnInit()
         {
             states = new Dictionary<string, IFsmNode>();
+            await UniTask.CompletedTask;
         }
 
         public async UniTask OnStart()
         {
-            _curNode?.OnEnter();
+            if (_curNode != null)
+            {
+                await _curNode.OnEnter();
+            }
         }
 
         public async UniTask OnUpdate()
         {
-            _curNode?.OnUpdate();
+            if (_curNode != null)
+            {
+                await _curNode.OnUpdate();
+            }
         }
 
         public async UniTask OnDestroy()
         {
             states.Clear();
             _curNode = null;
+            await UniTask.CompletedTask;
         }
 
         public void AddNode<T>() where T : IFsmNode
@@ -56,12 +64,12 @@ namespace Framework.Core
             }
         }
 
-        public void ChangeState<T>()
+        public async UniTask ChangeState<T>()
         {
-            ChangeState(typeof(T).FullName);
+            await ChangeState(typeof(T).FullName);
         }
 
-        public void ChangeState(string name)
+        public async UniTask ChangeState(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -72,9 +80,12 @@ namespace Framework.Core
             {
                 _preNode = _curNode;
                 _curNode = res;
-                _preNode.OnExit();
-                Debug.Log($"从{_preNode.GetType().Name}转换到{_curNode.GetType().Name}");
-                _curNode.OnEnter();
+                if (_preNode != null)
+                {
+                    await _preNode.OnExit();
+                }
+                Debug.Log($"从{(_preNode != null ? _preNode.GetType().Name : "null")}转换到{_curNode.GetType().Name}");
+                await _curNode.OnEnter();
             }
             else
             {

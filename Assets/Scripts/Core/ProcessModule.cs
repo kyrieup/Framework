@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Framework.Core
@@ -19,12 +20,12 @@ namespace Framework.Core
 
         public async UniTask OnStart()
         {
-            await _fsmMachine.OnStart();
+            await UniTask.CompletedTask;
         }
 
         public async UniTask OnUpdate()
         {
-            await _fsmMachine.OnUpdate();
+           await _fsmMachine.OnUpdate();
         }
 
         public async UniTask OnDestroy()
@@ -43,14 +44,14 @@ namespace Framework.Core
             _fsmMachine.AddNode(node);
         }
 
-        public void ChangeState<T>()
+        public async UniTask ChangeState<T>()
         {
-            _fsmMachine.ChangeState<T>();
+            await _fsmMachine.ChangeState<T>();
         }
 
-        public void ChangeState(string name)
+        public async UniTask ChangeState(string name)
         {
-            _fsmMachine.ChangeState(name);
+            await _fsmMachine.ChangeState(name);
         }
 
         public IFsmNode GetCurrentState()

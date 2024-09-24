@@ -1,0 +1,31 @@
+{
+    "FileVersion": "2.0.0",
+    "EnableAddressable": false,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 2,
+    "BuildPipeline": "BuiltinBuildPipeline",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "2024-09-23-1033",
+    "AssetList": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/GameArt/box_white_bottomleft.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "defaultpackage_assets_gameart.bundle",
+            "UnityCRC": 1155856084,
+            "FileHash": "8d34b4b636cfe03db6afffd2bcc2ba2b",
+            "FileCRC": "6971ef13",
+            "FileSize": 2616,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        }
+    ]
+}

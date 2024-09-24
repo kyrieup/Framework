@@ -1,0 +1,58 @@
+{
+    "Summary": {
+        "YooVersion": "2.2.4-preview",
+        "UnityVersion": "2022.3.36f1",
+        "BuildDate": "2024/9/23 17:13:53",
+        "BuildSeconds": 17,
+        "BuildTarget": 19,
+        "BuildMode": 0,
+        "BuildPipeline": "BuiltinBuildPipeline",
+        "BuildPackageName": "DefaultPackage",
+        "BuildPackageVersion": "2024-09-23-1033",
+        "UniqueBundleName": true,
+        "EnableAddressable": false,
+        "LocationToLower": false,
+        "IncludeAssetGUID": false,
+        "AutoCollectShaders": true,
+        "IgnoreRuleName": "YooAsset.Editor.NormalIgnoreRule",
+        "EnableSharePackRule": true,
+        "EncryptionClassName": "null",
+        "FileNameStyle": 2,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": true,
+        "AssetFileTotalCount": 1,
+        "MainAssetTotalCount": 1,
+        "AllBundleTotalCount": 1,
+        "AllBundleTotalSize": 2616,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/GameArt/box_white_bottomleft.png",
+            "AssetGUID": "c73904c47e0e4114899c49bab122a808",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_gameart.bundle",
+            "MainBundleSize": 2616,
+            "DependAssets": []
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "defaultpackage_assets_gameart.bundle",
+            "FileName": "defaultpackage_assets_gameart_8d34b4b636cfe03db6afffd2bcc2ba2b.bundle",
+            "FileHash": "8d34b4b636cfe03db6afffd2bcc2ba2b",
+            "FileCRC": "6971ef13",
+            "FileSize": 2616,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "AllBuiltinAssets": [
+                "Assets/GameArt/box_white_bottomleft.png"
+            ]
+        }
+    ],
+    "IndependAssets": []
+}
