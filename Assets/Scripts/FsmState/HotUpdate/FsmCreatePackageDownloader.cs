@@ -19,7 +19,7 @@ public class FsmCreatePackageDownloader : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        GameMain.Instance.TriggerEvent(EventEnum.ChangeProgress, this);
+        GameMain.Instance.TriggerEvent(EventName.ChangeProgress, this);
 
         await CreateDownloader();
     }
@@ -54,7 +54,7 @@ public class FsmCreatePackageDownloader : IFsmNode
             // 注意：开发者需要在下载前检测磁盘空间不足
             int totalDownloadCount = downloader.TotalDownloadCount;
             long totalDownloadBytes = downloader.TotalDownloadBytes;
-            GameMain.Instance.TriggerEvent(EventEnum.FoundUpdateFiles, this, new Dictionary<string, object> { { "totalDownloadCount", totalDownloadCount }, { "totalDownloadBytes", totalDownloadBytes } });
+            GameMain.Instance.TriggerEvent(EventName.FoundUpdateFiles, this, new Dictionary<string, object> { { "totalDownloadCount", totalDownloadCount }, { "totalDownloadBytes", totalDownloadBytes } });
         }
     }
 }

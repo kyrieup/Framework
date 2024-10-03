@@ -9,7 +9,7 @@ namespace Framework.Core
         /// <summary>
         /// 事件名称
         /// </summary>
-        public int EventName { get; private set; }
+        public string EventName { get; private set; }
         /// <summary>
         /// 事件发送者
         /// </summary>
@@ -19,7 +19,7 @@ namespace Framework.Core
         /// </summary>
         public Dictionary<string, object> Parameters { get; private set; }
 
-        public EventArgs(int eventName, object sender, Dictionary<string, object> parameters = null)
+        public EventArgs(string eventName, object sender, Dictionary<string, object> parameters = null)
         {
             EventName = eventName;
             Sender = sender;
@@ -31,11 +31,11 @@ namespace Framework.Core
     {
         public string Name => "Event";
 
-        private Dictionary<int, Action<EventArgs>> eventDictionary;
+        private Dictionary<string, Action<EventArgs>> eventDictionary;
 
         public EventModule()
         {
-            eventDictionary = new Dictionary<int, Action<EventArgs>>();
+            eventDictionary = new Dictionary<string, Action<EventArgs>>();
         }
 
         public async UniTask OnInit() { await UniTask.CompletedTask; }
@@ -47,37 +47,37 @@ namespace Framework.Core
             await UniTask.CompletedTask;
         }
 
-        public void AddListener(EventEnum eventName, Action<EventArgs> listener)
+        public void AddListener(string eventName, Action<EventArgs> listener)
         {
-            if (!eventDictionary.ContainsKey((int)eventName))
+            if (!eventDictionary.ContainsKey(eventName))
             {
-                eventDictionary[(int)eventName] = listener;
+                eventDictionary[eventName] = listener;
             }
             else
             {
-                eventDictionary[(int)eventName] += listener;
+                eventDictionary[eventName] += listener;
             }
         }
 
-        public void RemoveListener(EventEnum eventName, Action<EventArgs> listener)
+        public void RemoveListener(string eventName, Action<EventArgs> listener)
         {
-            if (eventDictionary.ContainsKey((int)eventName))
+            if (eventDictionary.ContainsKey(eventName))
             {
-                eventDictionary[(int)eventName] -= listener;
+                eventDictionary[eventName] -= listener;
 
-                if (eventDictionary[(int)eventName] == null)
+                if (eventDictionary[eventName] == null)
                 {
-                    eventDictionary.Remove((int)eventName);
+                    eventDictionary.Remove(eventName);
                 }
             }
         }
 
-        public void TriggerEvent(EventEnum eventName, object sender, Dictionary<string, object> parameters = null)
+        public void TriggerEvent(string eventName, object sender, Dictionary<string, object> parameters = null)
         {
-            if (eventDictionary.ContainsKey((int)eventName))
+            if (eventDictionary.ContainsKey(eventName))
             {
-                EventArgs args = new EventArgs((int)eventName, sender, parameters);
-                eventDictionary[(int)eventName]?.Invoke(args);
+                EventArgs args = new EventArgs(eventName, sender, parameters);
+                eventDictionary[eventName]?.Invoke(args);
             }
         }
     }
@@ -85,39 +85,67 @@ namespace Framework.Core
     /// <summary>
     /// 事件枚举
     /// </summary>
-    public enum EventEnum
+    public static class EventName
     {
         /// <summary>
         /// 进度改变
         /// </summary>
-        ChangeProgress,
+        public const string ChangeProgress = "ChangeProgress";
         /// <summary>
         /// 初始化失败
         /// </summary>
-        InitializeFailed,
+        public const string InitializeFailed = "InitializeFailed";
         /// <summary>
         /// 发现更新文件
         /// </summary>
-        FoundUpdateFiles,
+        public const string FoundUpdateFiles = "FoundUpdateFiles";
         /// <summary>
         /// 下载失败
         /// </summary>
-        WebFileDownloadFailed,
+        public const string WebFileDownloadFailed = "WebFileDownloadFailed";
         /// <summary>
         /// 下载进度更新
         /// </summary>
-        DownloadProgressUpdate,
+        public const string DownloadProgressUpdate = "DownloadProgressUpdate";
         /// <summary>
         /// 更新包版本失败
         /// </summary>
-        PatchManifestUpdateFailed,
+        public const string PatchManifestUpdateFailed = "PatchManifestUpdateFailed";
         /// <summary>
         /// 包版本更新失败
         /// </summary>
-        PackageVersionUpdateFailed,
+        public const string PackageVersionUpdateFailed = "PackageVersionUpdateFailed";
         /// <summary>
         /// 更新完毕
         /// </summary>
-        UpdaterDone,
+        public const string UpdaterDone = "UpdaterDone";
+        /// <summary>
+        /// 网络消息
+        /// </summary>
+        public const string NetworkMessage = "NetworkMessage";
+        /// <summary>
+        /// 网络频道错误
+        /// </summary>
+        public const string NetworkChannelError = "NetworkChannelError";
+        /// <summary>
+        /// 网络错误
+        /// </summary>
+        public const string NetworkCustomError = "NetworkCustomError";
+        /// <summary>
+        /// 网络连接成功
+        /// </summary>
+        public const string NetworkConnected = "NetworkConnected";
+        /// <summary>
+        /// 网络连接失败
+        /// </summary>
+        public const string NetworkConnectFailed = "NetworkConnectFailed";
+        /// <summary>
+        /// 网络连接断开
+        /// </summary>
+        public const string NetworkDisconnected = "NetworkDisconnected";
+        /// <summary>
+        /// 网络心跳丢失
+        /// </summary>
+        public const string NetworkHeartBeatLost = "NetworkHeartBeatLost";  
     }
 }

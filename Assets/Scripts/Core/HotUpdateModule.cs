@@ -80,7 +80,7 @@ public class HotUpdateModule : IGameModule
 
     private void AddListener()
     {
-        GameMain.Instance.AddListener(EventEnum.UpdaterDone, (args) =>
+        GameMain.Instance.AddListener(EventName.UpdaterDone, (args) =>
         {
             _steps = HotUpdateSteps.Done;
         });

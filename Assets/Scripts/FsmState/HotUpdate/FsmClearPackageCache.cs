@@ -19,7 +19,7 @@ internal class FsmClearPackageCache : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        GameMain.Instance.TriggerEvent(EventEnum.ChangeProgress, this);
+        GameMain.Instance.TriggerEvent(EventName.ChangeProgress, this);
 
         var packageName = (string)_machine.GetBlackboardValue("PackageName");
         var package = YooAssets.GetPackage(packageName);

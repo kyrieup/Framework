@@ -1,6 +1,8 @@
 using System;
 
-
+/// <summary>
+/// 大端序
+/// </summary>
 public class BigEndianOrder : IByteOrder
 {
     public bool IsLittleEndian => false;

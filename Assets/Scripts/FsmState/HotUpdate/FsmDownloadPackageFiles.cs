@@ -18,7 +18,7 @@ internal class FsmDownloadPackageFiles : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        GameMain.Instance.TriggerEvent(EventEnum.ChangeProgress, this);
+        GameMain.Instance.TriggerEvent(EventName.ChangeProgress, this);
 
         await BeginDownload();
     }
@@ -34,11 +34,11 @@ internal class FsmDownloadPackageFiles : IFsmNode
     private async UniTask BeginDownload()
     {
         var downloader = (ResourceDownloaderOperation)_machine.GetBlackboardValue("Downloader");
-        downloader.OnDownloadErrorCallback = (operation, error) => GameMain.Instance.TriggerEvent(EventEnum.WebFileDownloadFailed, this);
+        downloader.OnDownloadErrorCallback = (operation, error) => GameMain.Instance.TriggerEvent(EventName.WebFileDownloadFailed, this);
         downloader.OnDownloadProgressCallback = (totalDownloadCount, currentDownloadCount, totalDownloadBytes, currentDownloadBytes) =>
         {
             float progress = (float)currentDownloadBytes / totalDownloadBytes;
-            GameMain.Instance.TriggerEvent(EventEnum.DownloadProgressUpdate, this, new System.Collections.Generic.Dictionary<string, object> { { "Progress", progress } });
+            GameMain.Instance.TriggerEvent(EventName.DownloadProgressUpdate, this, new System.Collections.Generic.Dictionary<string, object> { { "Progress", progress } });
         };
         downloader.BeginDownload();
         await downloader.ToUniTask();

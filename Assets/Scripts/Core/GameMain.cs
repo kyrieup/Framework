@@ -119,8 +119,8 @@ namespace Framework.Core
 
         // 添加这个便捷方法来获取 EventModule
         private EventModule GetEventModule() => GetModule<EventModule>();
-        public void TriggerEvent(EventEnum eventName, object sender, Dictionary<string, object> parameters = null) => GetEventModule().TriggerEvent(eventName, sender, parameters);
-        public void AddListener(EventEnum eventName, Action<EventArgs> listener) => GetEventModule().AddListener(eventName, listener);
-        public void RemoveListener(EventEnum eventName, Action<EventArgs> listener) => GetEventModule().RemoveListener(eventName, listener);
+        public void TriggerEvent(string eventName, object sender, Dictionary<string, object> parameters = null) => GetEventModule().TriggerEvent(eventName, sender, parameters);
+        public void AddListener(string eventName, Action<EventArgs> listener) => GetEventModule().AddListener(eventName, listener);
+        public void RemoveListener(string eventName, Action<EventArgs> listener) => GetEventModule().RemoveListener(eventName, listener);
     }
 }

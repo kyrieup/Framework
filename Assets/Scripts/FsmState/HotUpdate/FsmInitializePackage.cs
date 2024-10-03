@@ -22,7 +22,7 @@ internal class FsmInitializePackage : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        GameMain.Instance.TriggerEvent(EventEnum.ChangeProgress, this);
+        GameMain.Instance.TriggerEvent(EventName.ChangeProgress, this);
 
         await InitPackage();
     }
@@ -90,7 +90,7 @@ internal class FsmInitializePackage : IFsmNode
         if (initializationOperation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"{initializationOperation.Error}");
-            GameMain.Instance.TriggerEvent(EventEnum.InitializeFailed, this);
+            GameMain.Instance.TriggerEvent(EventName.InitializeFailed, this);
         }
         else
         {

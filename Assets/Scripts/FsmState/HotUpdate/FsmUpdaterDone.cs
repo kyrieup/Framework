@@ -25,7 +25,7 @@ internal class FsmUpdaterDone : IFsmNode
     }
     async UniTask IFsmNode.OnExit()
     {
-        GameMain.Instance.TriggerEvent(EventEnum.UpdaterDone, null);
+        GameMain.Instance.TriggerEvent(EventName.UpdaterDone, null);
         await UniTask.CompletedTask;
     }
 }

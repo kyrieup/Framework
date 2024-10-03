@@ -19,7 +19,7 @@ internal class FsmUpdatePackageVersion : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        GameMain.Instance.TriggerEvent(EventEnum.ChangeProgress, this);
+        GameMain.Instance.TriggerEvent(EventName.ChangeProgress, this);
         await UpdatePackageVersion();
     }
     async UniTask IFsmNode.OnUpdate()
@@ -43,7 +43,7 @@ internal class FsmUpdatePackageVersion : IFsmNode
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning(operation.Error);
-            GameMain.Instance.TriggerEvent(EventEnum.PackageVersionUpdateFailed, this);
+            GameMain.Instance.TriggerEvent(EventName.PackageVersionUpdateFailed, this);
         }
         else
         {

@@ -18,7 +18,7 @@ public class FsmUpdatePackageManifest : IFsmNode
     }
     async UniTask IFsmNode.OnEnter()
     {
-        GameMain.Instance.TriggerEvent(EventEnum.ChangeProgress, this);
+        GameMain.Instance.TriggerEvent(EventName.ChangeProgress, this);
         await UpdateManifest();
     }
     async UniTask IFsmNode.OnUpdate()
@@ -43,7 +43,7 @@ public class FsmUpdatePackageManifest : IFsmNode
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning(operation.Error);
-            GameMain.Instance.TriggerEvent(EventEnum.PatchManifestUpdateFailed, this);
+            GameMain.Instance.TriggerEvent(EventName.PatchManifestUpdateFailed, this);
             return;
         }
         else
